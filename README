@@ -1,0 +1,11 @@
+You need to install:
+* flask
+* flask-sqlalchemy
+* cherrypy
+
+
+To run the HTTP server on port 8080
+ python server_http.py
+
+To run the HTTPS server on port 8443
+ python server_https.py
