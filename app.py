@@ -45,10 +45,13 @@ def login():
         return error("E1")
     
     s = Session.get_by_user(u)
-    if not s:
-        s = Session(u)
-        db_session.add(s)
+    if s is not None:
+        db_session.delete(s)
         db_session.commit()
+        
+    s = Session(u)
+    db_session.add(s)
+    db_session.commit()
     
     return jsonify(s.values)
 
