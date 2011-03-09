@@ -97,17 +97,3 @@ def transfer(session):
     db_session.commit()
     
     return success("S1")
-
-
-if __name__ == '__main__':
-    d = wsgiserver.WSGIPathInfoDispatcher({'/': app})
-    server = wsgiserver.CherryPyWSGIServer(('0.0.0.0', 8080), d)
-    ssl_server = wsgiserver.CherryPyWSGIServer(('0.0.0.0', 8443), d)
-    ssl_server.ssl_certificate = "server.crt"
-    ssl_server.ssl_privatekey = "server.key"
-    try:
-        #server.start()
-        ssl_server.start()
-    except KeyboardInterrupt:
-        #server.stop()
-        ssl_server.stop()
