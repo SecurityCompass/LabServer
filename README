@@ -9,3 +9,19 @@ To run the HTTP server on port 8080
 
 To run the HTTPS server on port 8443
  python server_https.py
+
+
+
+Installation through virtualenv
+
+cd ~/tmp
+virtualenv --no-site-packages server-env
+source server-env/bin/activate
+easy_install flask cherrypy sqlalchemy simplejson
+
+Running with virtualenv
+
+source ~/tmp/server-env/bin/activate
+cd ~/SecurityCompass/server
+python server_http.py
+
