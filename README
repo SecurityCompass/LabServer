@@ -5,10 +5,10 @@ You need to install:
 
 
 To run the HTTP server on port 8080
- python server_http.py
+ python app.py 
 
 To run the HTTPS server on port 8443
- python server_https.py
+ python app.py --ssl --port 8443
 
 
 

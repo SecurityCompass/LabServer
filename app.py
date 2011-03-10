@@ -1,3 +1,5 @@
+import getopt
+import sys
 from flask import Flask, request, render_template
 from cherrypy import wsgiserver
 from functools import wraps
@@ -21,6 +23,7 @@ jsonify = json.dumps
 | S1 | transfer complete |
 """
 
+DEFAULT_PORT = 8080
 
 def error(text):
     return jsonify({"error" : text})
@@ -97,3 +100,38 @@ def transfer(session):
     db_session.commit()
     
     return success("S1")
+
+def usage():
+    print "Runs the FalseSecure Mobile server"
+    print "Arguments: "
+    print "  --debug     enable debug mode"
+    print "  --port p    serve on port p (default 8080)"
+    print "  --ssl       enable SSL"
+    print "  --help      print this message"
+
+if __name__ == '__main__':
+    port = DEFAULT_PORT
+    ssl = False
+    opts, args = getopt.getopt(sys.argv[1:], "", ["ssl", "debug", "help", "port="])
+    for o, a in opts:
+        if o == "--help":
+            usage()
+            sys.exit(2)
+        elif o == "--debug":
+            app.debug = True
+        elif o == "--ssl":
+            ssl = True
+            wsgiserver.CherryPyWSGIServer.ssl_certificate = "keys/server.crt"
+            wsgiserver.CherryPyWSGIServer.ssl_private_key = "keys/server.key"
+        elif o == "--port":
+            port = a
+
+    d = wsgiserver.WSGIPathInfoDispatcher({'/': app})
+    server = wsgiserver.CherryPyWSGIServer(('0.0.0.0', port), d)
+    
+    print "Serving %s on port %d %s" % ("HTTP" if ssl else "HTTPS", port, "(debug enabled)" if app.debug else "")
+    
+    try:
+        server.start()
+    except KeyboardInterrupt:
+        server.stop()
