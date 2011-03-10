@@ -89,8 +89,12 @@ def transfer(session):
     to_account = Account.query.filter(Account.account_number == int(request.form["to_account"])).first()
     if not from_account or not to_account:
         return error("E3")
-    (dollars, cents) = request.form["amount"].split('.')
-    total_cents = int(dollars)*100 + int(cents)
+
+    if request.form["amount"].find('.') != -1:
+        (dollars, cents) = request.form["amount"].split('.')
+        total_cents = int(dollars)*100 + int(cents)
+    else:
+        total_cents = int(request.form["amount"]) * 100
     
     if from_account.balance < total_cents:
         return error("E4")
