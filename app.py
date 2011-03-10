@@ -82,7 +82,7 @@ def statement(session):
 @app.route('/transfer', methods=['POST'])
 @validate_session
 def transfer(session):
-    from_account = session.user.account
+    from_account = Account.query.filter(Account.account_number == int(request.form["from_account"])).first()
     to_account = Account.query.filter(Account.account_number == int(request.form["to_account"])).first()
     if not to_account:
         return error("E3")
