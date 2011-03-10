@@ -80,7 +80,7 @@ def balance(session):
 @app.route('/statement')
 @validate_session
 def statement(session):
-    return render_template('statement.html', account=session.user.account)
+    return render_template('statement.html', accounts=session.user.accounts)
 
 @app.route('/transfer', methods=['POST'])
 @validate_session
