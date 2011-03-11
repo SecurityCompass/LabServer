@@ -5,6 +5,6 @@
 {% for a in accounts %}
 <p>
 {{ a.type|capitalize }} Account: {{ a.account_number }}<br/>
-Balance: {{ a.balance }}
+Balance: {{ a.balance_formatted }}
 </p>
 {% endfor %}
