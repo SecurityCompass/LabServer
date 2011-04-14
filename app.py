@@ -128,12 +128,12 @@ if __name__ == '__main__':
             wsgiserver.CherryPyWSGIServer.ssl_certificate = "keys/server.crt"
             wsgiserver.CherryPyWSGIServer.ssl_private_key = "keys/server.key"
         elif o == "--port":
-            port = a
+            port = int(a)
 
     d = wsgiserver.WSGIPathInfoDispatcher({'/': app})
     server = wsgiserver.CherryPyWSGIServer(('0.0.0.0', port), d)
-    
-    print "Serving %s on port %d %s" % ("HTTP" if ssl else "HTTPS", port, "(debug enabled)" if app.debug else "")
+
+    print "Serving %s on port %d %s" % ("HTTP" if not ssl else "HTTPS", port, "(debug enabled)" if app.debug else "")
     
     try:
         server.start()
