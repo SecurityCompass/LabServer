@@ -131,7 +131,7 @@ if __name__ == '__main__':
             port = int(a)
 
     d = wsgiserver.WSGIPathInfoDispatcher({'/': app})
-    server = wsgiserver.CherryPyWSGIServer(('0.0.0.0', port), d)
+    server = wsgiserver.CherryPyWSGIServer(('0.0.0.0', port), d, timeout=200)
 
     print "Serving %s on port %d %s" % ("HTTP" if not ssl else "HTTPS", port, "(debug enabled)" if app.debug else "")
     
