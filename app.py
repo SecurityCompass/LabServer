@@ -125,8 +125,8 @@ if __name__ == '__main__':
             app.debug = True
         elif o == "--ssl":
             ssl = True
-            wsgiserver.CherryPyWSGIServer.ssl_certificate = "keys/server.crt"
-            wsgiserver.CherryPyWSGIServer.ssl_private_key = "keys/server.key"
+            wsgiserver.CherryPyWSGIServer.ssl_certificate = "ssl/certs/server.crt"
+            wsgiserver.CherryPyWSGIServer.ssl_private_key = "ssl/private/server.key"
         elif o == "--port":
             port = int(a)
 
