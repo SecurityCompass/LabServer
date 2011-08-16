@@ -92,19 +92,13 @@ def transfer(session):
     if not from_account or not to_account: #validate that accounts exist
         return error("E3")
     
-    #validate that accounts belong to user:
-    if to_account.user != session.user or from_account.user != session.user:
-        return error("E6")
-    
     #parse sent value and transform into cents
     if request.form["amount"].find('.') != -1:
         (dollars, cents) = request.form["amount"].split('.')
         total_cents = int(dollars)*100 + int(cents)
     else:
         total_cents = int(request.form["amount"]) * 100
-    #validate that amount is positive
-    if total_cents < 0:
-        return error("E5")
+    
     #validate that balance is big enough
     if from_account.balance < total_cents:
         return error("E4")
