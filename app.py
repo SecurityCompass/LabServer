@@ -1,11 +1,12 @@
 import getopt
 import sys
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, request_started
 from cherrypy import wsgiserver
 from functools import wraps
 from models import User, Account, Session
 from database import db_session
 import simplejson as json
+import datetime
 app = Flask(__name__)
 
 jsonify = json.dumps
@@ -25,6 +26,9 @@ jsonify = json.dumps
 
 DEFAULT_PORT = 8080
 
+def consolelog(sender):
+     print "%s [%s] \"%s %s\"" % (request.remote_addr, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), request.method, request.url)
+
 def error(text):
     return jsonify({"error" : text})
 
@@ -40,7 +44,6 @@ def validate_session(f):
         return f(s, *args, **kwargs)
     return decorated_f
 
-
 @app.route('/login', methods=['POST'])
 def login():
     u = User.query.filter(User.username == request.form["username"]).first()
@@ -55,7 +58,7 @@ def login():
     s = Session(u)
     db_session.add(s)
     db_session.commit()
-    
+
     return jsonify(s.values)
 
 
@@ -136,9 +139,12 @@ if __name__ == '__main__':
     d = wsgiserver.WSGIPathInfoDispatcher({'/': app})
     server = wsgiserver.CherryPyWSGIServer(('0.0.0.0', port), d, timeout=200)
 
+    request_started.connect(consolelog, app)
+
     print "Serving %s on port %d %s" % ("HTTP" if not ssl else "HTTPS", port, "(debug enabled)" if app.debug else "")
     
     try:
         server.start()
     except KeyboardInterrupt:
         server.stop()
+
