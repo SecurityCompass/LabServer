@@ -27,7 +27,13 @@ jsonify = json.dumps
 DEFAULT_PORT = 8080
 
 def consolelog(sender):
-     print "%s [%s] \"%s %s\"" % (request.remote_addr, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), request.method, request.url)
+    print " [*] %s [%s] \"%s %s\"" % (request.remote_addr, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), request.method, request.url)
+
+
+@app.errorhandler(500)
+def internal_server_error(error):
+    print " [!]", error
+    return "Internal Server Error", 500
 
 def error(text):
     return jsonify({"error" : text})
